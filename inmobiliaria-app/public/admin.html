@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel de administración · Catálogo</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#16202B">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a href="/" class="brand">Catálogo<span class="dot">·</span>Prop
+      <small>Buscador de propiedades</small>
+    </a>
+    <nav class="header-nav">
+      <a href="/">Buscar</a>
+      <a href="/admin.html" class="active">Panel de administración</a>
+    </nav>
+  </div>
+</header>
+
+<div class="container admin-shell">
+
+  <div id="loginBox" class="admin-login">
+    <h2 style="margin-bottom:6px">Ingresar al panel</h2>
+    <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:20px">Ingresá la contraseña de administración para cargar y editar propiedades.</p>
+    <div class="field">
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" placeholder="••••••••">
+    </div>
+    <button class="btn btn-primary" id="loginBtn" style="width:100%;margin-top:6px">Ingresar</button>
+    <p id="loginError" style="color:var(--brick-dark);font-size:0.85rem;margin-top:10px"></p>
+  </div>
+
+  <div id="panelBox" style="display:none">
+    <div class="admin-header">
+      <h2>Propiedades cargadas</h2>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" id="logoutBtn">Cerrar sesión</button>
+        <button class="btn btn-primary" id="newBtn">+ Nueva propiedad</button>
+      </div>
+    </div>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>N°</th><th>Título</th><th>Operación</th><th>Tipo</th><th>Ciudad</th><th>Precio</th><th>Estado</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal alta/edición -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <h3 id="modalTitle">Nueva propiedad</h3>
+    <form id="propertyForm">
+      <input type="hidden" id="propId">
+      <div class="form-grid">
+        <div class="field full">
+          <label>Título</label>
+          <input type="text" id="f_title" required>
+        </div>
+        <div class="field full">
+          <label>Descripción</label>
+          <textarea id="f_description" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label>Operación</label>
+          <select id="f_operation" required>
+            <option value="venta">Venta</option>
+            <option value="alquiler">Alquiler</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tipo</label>
+          <select id="f_type" required>
+            <option value="casa">Casa</option>
+            <option value="departamento">Departamento</option>
+            <option value="ph">PH</option>
+            <option value="terreno">Terreno</option>
+            <option value="local">Local comercial</option>
+            <option value="oficina">Oficina</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Precio</label>
+          <input type="number" id="f_price" required>
+        </div>
+        <div class="field">
+          <label>Moneda</label>
+          <select id="f_currency">
+            <option value="USD">USD</option>
+            <option value="ARS">ARS</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Ciudad</label>
+          <input type="text" id="f_city" required>
+        </div>
+        <div class="field">
+          <label>Provincia</label>
+          <input type="text" id="f_province" required>
+        </div>
+        <div class="field full">
+          <label>Dirección</label>
+          <input type="text" id="f_address">
+        </div>
+        <div class="field">
+          <label>Barrio</label>
+          <input type="text" id="f_neighborhood">
+        </div>
+        <div class="field">
+          <label>Ambientes</label>
+          <input type="number" id="f_rooms">
+        </div>
+        <div class="field">
+          <label>Dormitorios</label>
+          <input type="number" id="f_bedrooms">
+        </div>
+        <div class="field">
+          <label>Baños</label>
+          <input type="number" id="f_bathrooms">
+        </div>
+        <div class="field">
+          <label>Superficie total (m²)</label>
+          <input type="number" id="f_total_area">
+        </div>
+        <div class="field">
+          <label>Superficie cubierta (m²)</label>
+          <input type="number" id="f_covered_area">
+        </div>
+        <div class="field">
+          <label>Antigüedad (años)</label>
+          <input type="number" id="f_antiquity">
+        </div>
+        <div class="field">
+          <label>Cochera</label>
+          <select id="f_garage">
+            <option value="0">No</option>
+            <option value="1">Sí</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Destacada</label>
+          <select id="f_featured">
+            <option value="0">No</option>
+            <option value="1">Sí</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>URL de imagen principal</label>
+          <input type="text" id="f_image" placeholder="https://...">
+        </div>
+        <div class="field">
+          <label>Nombre de contacto</label>
+          <input type="text" id="f_contact_name">
+        </div>
+        <div class="field">
+          <label>Teléfono de contacto</label>
+          <input type="text" id="f_contact_phone" placeholder="+54 9 380 400-0000">
+        </div>
+        <div class="field">
+          <label>Estado</label>
+          <select id="f_status">
+            <option value="publicada">Publicada</option>
+            <option value="pausada">Pausada</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar propiedad</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

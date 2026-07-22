@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo · Buscador de Propiedades</title>
+<meta name="description" content="Encontrá tu próxima propiedad: casas, departamentos, terrenos y locales en venta y alquiler.">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#16202B">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a href="/" class="brand">Catálogo<span class="dot">·</span>Prop
+      <small>Buscador de propiedades</small>
+    </a>
+    <nav class="header-nav">
+      <a href="/" class="active">Buscar</a>
+      <a href="/admin.html">Panel de administración</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Listado N° 001 en adelante</div>
+    <h1>Cada propiedad, con su ficha completa.</h1>
+    <p class="lead">Buscá por ubicación, tipo y presupuesto. Cada aviso muestra superficie, ambientes y precio como en una ficha técnica: sin vueltas.</p>
+
+    <div class="op-tabs" id="opTabs">
+      <button data-op="" class="active">Todas</button>
+      <button data-op="venta">Venta</button>
+      <button data-op="alquiler">Alquiler</button>
+    </div>
+
+    <div class="search-panel">
+      <div class="field">
+        <label for="q">Ubicación o palabra clave</label>
+        <input type="text" id="q" placeholder="Barrio, dirección, ciudad...">
+      </div>
+      <div class="field">
+        <label for="type">Tipo</label>
+        <select id="type">
+          <option value="">Todos</option>
+          <option value="casa">Casa</option>
+          <option value="departamento">Departamento</option>
+          <option value="ph">PH</option>
+          <option value="terreno">Terreno</option>
+          <option value="local">Local comercial</option>
+          <option value="oficina">Oficina</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="price_min">Precio mín.</label>
+        <input type="number" id="price_min" placeholder="0">
+      </div>
+      <div class="field">
+        <label for="price_max">Precio máx.</label>
+        <input type="number" id="price_max" placeholder="Sin límite">
+      </div>
+      <button class="btn btn-primary" id="searchBtn">Buscar</button>
+    </div>
+  </div>
+</section>
+
+<section class="results-section">
+  <div class="container">
+    <div class="results-header">
+      <div class="results-count" id="resultsCount">Cargando propiedades…</div>
+      <select class="sort-select" id="sortSelect">
+        <option value="recent">Más recientes</option>
+        <option value="price_asc">Precio: menor a mayor</option>
+        <option value="price_desc">Precio: mayor a menor</option>
+        <option value="area_desc">Superficie: mayor a menor</option>
+      </select>
+    </div>
+
+    <div class="grid" id="grid"></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>© 2026 Catálogo de Propiedades</span>
+    <span>Hecho con Boutique Creativa</span>
+  </div>
+</footer>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
