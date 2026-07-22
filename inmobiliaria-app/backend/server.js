@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
 const path = require('path');
+const fs = require('fs');
+const multer = require('multer');
 const db = require('./db');
 
 const app = express();
@@ -10,9 +12,30 @@ const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const ADMIN_TOKEN_SECRET = process.env.ADMIN_TOKEN_SECRET || 'secret';
 
+const UPLOADS_DIR = path.join(__dirname, '..', 'public', 'uploads');
+fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
+
+// ---------- Subida de imágenes ----------
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+  filename: (req, file, cb) => {
+    const safeExt = path.extname(file.originalname).toLowerCase().replace(/[^a-z0-9.]/g, '') || '.jpg';
+    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}${safeExt}`;
+    cb(null, unique);
+  }
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 8 * 1024 * 1024 }, // 8MB por foto
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) return cb(new Error('Solo se permiten archivos de imagen.'));
+    cb(null, true);
+  }
+});
 
 // ---------- Auth simple para el panel de administración ----------
 function makeToken() {
@@ -117,6 +140,18 @@ app.get('/api/properties/:id', (req, res) => {
   const row = db.prepare('SELECT * FROM properties WHERE id = ?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Propiedad no encontrada.' });
   res.json(parseProperty(row));
+});
+
+app.post('/api/admin/upload', requireAuth, upload.array('images', 12), (req, res) => {
+  if (!req.files || !req.files.length) return res.status(400).json({ error: 'No se recibió ninguna imagen.' });
+  const urls = req.files.map((f) => `/uploads/${f.filename}`);
+  res.json({ urls });
+});
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError || err.message === 'Solo se permiten archivos de imagen.') {
+    return res.status(400).json({ error: err.message === 'File too large' ? 'La imagen pesa demasiado (máx. 8MB).' : err.message });
+  }
+  next(err);
 });
 
 // ---------- API admin: alta, edición, baja ----------

@@ -3,18 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Panel de administración · Catálogo</title>
+<title>Panel de administración · Sosa y Asociados</title>
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#16202B">
+<meta name="theme-color" content="#055055">
 <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="bar">
-    <a href="/" class="brand">Catálogo<span class="dot">·</span>Prop
-      <small>Buscador de propiedades</small>
-    </a>
+    <a href="/" class="brand"><img src="/images/logo.png" alt="Sosa y Asociados"></a>
     <nav class="header-nav">
       <a href="/">Buscar</a>
       <a href="/admin.html" class="active">Panel de administración</a>
@@ -154,8 +152,16 @@
           </select>
         </div>
         <div class="field full">
-          <label>URL de imagen principal</label>
-          <input type="text" id="f_image" placeholder="https://...">
+          <label>Fotos de la propiedad</label>
+          <div class="image-uploader">
+            <div class="upload-row">
+              <button type="button" class="btn btn-ghost" id="uploadTrigger">+ Subir fotos desde tu computadora</button>
+              <input type="file" id="f_images_file" accept="image/*" multiple style="display:none">
+              <span class="upload-hint" id="uploadStatus"></span>
+            </div>
+            <div class="image-thumbs" id="imageThumbs"></div>
+            <div class="upload-hint">La primera foto de la lista es la que se muestra como principal en el buscador. Máx. 8MB por foto.</div>
+          </div>
         </div>
         <div class="field">
           <label>Nombre de contacto</label>

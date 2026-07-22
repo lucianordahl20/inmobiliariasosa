@@ -1,5 +1,49 @@
 let token = sessionStorage.getItem('admin_token') || '';
 let properties = [];
+let currentImages = [];
+
+function renderThumbs() {
+  const el = document.getElementById('imageThumbs');
+  el.innerHTML = currentImages.map((url, i) => `
+    <div class="image-thumb">
+      <img src="${url}" alt="Foto ${i + 1}">
+      <button type="button" data-remove="${i}" title="Quitar foto">✕</button>
+    </div>
+  `).join('');
+  el.querySelectorAll('button[data-remove]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentImages.splice(Number(btn.dataset.remove), 1);
+      renderThumbs();
+    });
+  });
+}
+
+async function uploadFiles(fileList) {
+  const statusEl = document.getElementById('uploadStatus');
+  const formData = new FormData();
+  Array.from(fileList).forEach(file => formData.append('images', file));
+  statusEl.textContent = 'Subiendo...';
+  try {
+    const res = await fetch('/api/admin/upload', {
+      method: 'POST',
+      headers: { 'x-admin-token': token },
+      body: formData
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      statusEl.textContent = '';
+      showToast(data.error || 'No se pudieron subir las fotos.');
+      return;
+    }
+    currentImages.push(...data.urls);
+    renderThumbs();
+    statusEl.textContent = `${data.urls.length} foto(s) subida(s).`;
+    setTimeout(() => { statusEl.textContent = ''; }, 2500);
+  } catch (err) {
+    statusEl.textContent = '';
+    showToast('No se pudo conectar con el servidor para subir las fotos.');
+  }
+}
 
 const fmtMoney = (price, currency) => {
   const symbol = currency === 'USD' ? 'US$' : '$';
@@ -76,10 +120,12 @@ function fillForm(p) {
   document.getElementById('f_antiquity').value = (p.antiquity ?? '');
   document.getElementById('f_garage').value = p.garage ? '1' : '0';
   document.getElementById('f_featured').value = p.featured ? '1' : '0';
-  document.getElementById('f_image').value = (p.images && p.images[0]) || '';
   document.getElementById('f_contact_name').value = p.contact_name || '';
   document.getElementById('f_contact_phone').value = p.contact_phone || '';
   document.getElementById('f_status').value = p.status || 'publicada';
+  currentImages = Array.isArray(p.images) ? [...p.images] : [];
+  renderThumbs();
+  document.getElementById('uploadStatus').textContent = '';
 }
 
 function openModal(id) {
@@ -132,7 +178,7 @@ document.getElementById('propertyForm').addEventListener('submit', async (e) => 
     antiquity: document.getElementById('f_antiquity').value,
     garage: document.getElementById('f_garage').value === '1',
     featured: document.getElementById('f_featured').value === '1',
-    images: document.getElementById('f_image').value ? [document.getElementById('f_image').value] : [],
+    images: currentImages,
     contact_name: document.getElementById('f_contact_name').value,
     contact_phone: document.getElementById('f_contact_phone').value,
     status: document.getElementById('f_status').value
@@ -152,6 +198,16 @@ document.getElementById('propertyForm').addEventListener('submit', async (e) => 
   } else {
     const err = await res.json();
     showToast(err.error || 'No se pudo guardar la propiedad.');
+  }
+});
+
+document.getElementById('uploadTrigger').addEventListener('click', () => {
+  document.getElementById('f_images_file').click();
+});
+document.getElementById('f_images_file').addEventListener('change', (e) => {
+  if (e.target.files && e.target.files.length) {
+    uploadFiles(e.target.files);
+    e.target.value = ''; // permite volver a elegir los mismos archivos si hace falta
   }
 });
 

@@ -1,6 +1,6 @@
-# Catálogo de Propiedades — Buscador tipo Zonaprop (MVP)
+# Sosa y Asociados — Buscador de Propiedades (MVP)
 
-Aplicación completa: backend real con base de datos, API de búsqueda/filtros, panel de administración para cargar propiedades, y frontend web responsive que funciona como app (PWA) en el celular.
+Aplicación completa: backend real con base de datos, API de búsqueda/filtros, panel de administración para cargar propiedades, y frontend web responsive que funciona como app (PWA) en el celular. Con la identidad visual de Estudio Jurídico Inmobiliario Contable Sosa y Asociados.
 
 ## Qué incluye
 
@@ -8,7 +8,17 @@ Aplicación completa: backend real con base de datos, API de búsqueda/filtros, 
 - **Frontend**: HTML/CSS/JS sin frameworks, servido por el mismo backend. Responsive (se adapta a celular) e instalable como PWA (ícono en el celular, funciona en pantalla completa).
 - **Buscador** (`/`): filtros por operación (venta/alquiler), tipo, precio, texto libre; orden por precio/superficie/fecha; paginación.
 - **Ficha de propiedad** (`/property.html?id=...`): galería, ficha técnica tipo "planilla" y botón de contacto por WhatsApp.
-- **Panel de administración** (`/admin.html`): login con contraseña, alta, edición y baja de propiedades.
+- **Panel de administración** (`/admin.html`): login con contraseña, alta, edición y baja de propiedades, con subida de fotos directo desde la computadora (no hace falta pegar links).
+
+## Identidad de marca
+
+- **Logo**: `public/images/logo.png` — para cambiarlo, reemplazá ese archivo por otro con el mismo nombre.
+- **Colores**: verde principal `#055055`, verde secundario `#C9D7CB`. Están definidos como variables al principio de `public/css/styles.css` (`--ink` y `--secondary`), así que para ajustar el tono alcanza con cambiar esos dos valores.
+- **Tipografía**: Fedra Sans Std (Light y Medium). Como es una fuente paga, no viene incluida en el proyecto — mirá `public/fonts/LEEME.txt` para los pasos exactos. Mientras no se suban esos archivos, el sitio usa Inter como reemplazo visual muy cercano, así que nunca se rompe.
+
+## Fotos de las propiedades
+
+Desde el panel de administración podés subir fotos directo desde tu computadora o celular (botón "+ Subir fotos"), sin necesidad de buscar links externos. **Importante**: en el plan gratuito de Render, los archivos subidos se pueden borrar si el servidor se reinicia (por ejemplo, al actualizar código). Para que las fotos queden guardadas de forma permanente y segura, en algún momento conviene migrar el almacenamiento a un servicio como Cloudinary o un bucket de almacenamiento (puedo ayudarte con eso cuando lo necesites).
 
 ## Cómo correrlo en tu máquina
 

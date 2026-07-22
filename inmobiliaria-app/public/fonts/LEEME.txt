@@ -1,0 +1,17 @@
+Esta carpeta es donde van los archivos de la tipografía Fedra Sans Std, si el estudio ya tiene la licencia.
+
+Fedra Sans es una fuente paga (de Typotheque), así que no se puede traer de internet
+automáticamente como Google Fonts. Para que el sitio la use de verdad, pedí (o buscá
+en la compu del estudio) estos dos archivos y ponelos acá, con estos nombres exactos:
+
+  FedraSansStd-Light.woff2
+  FedraSansStd-Medium.woff2
+
+Si tu licencia solo trae archivos .otf o .ttf, también sirven — con estos nombres:
+
+  FedraSansStd-Light.otf
+  FedraSansStd-Medium.otf
+
+Mientras estos archivos no estén, el sitio se ve igual (con una tipografía muy
+parecida, Inter) y no se rompe nada. En cuanto subas los archivos acá y volvés a
+publicar la app, el texto pasa a usar la fuente real automáticamente.
